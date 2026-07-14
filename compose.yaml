@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:18.4
+    container_name: cobryn-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "${PORT}:5432"
+
+    volumes:
+      - cobryn_postgres_data:/var/lib/postgresql
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cobryn -d cobryn"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  cobryn_postgres_data:
