@@ -320,8 +320,8 @@ Example test areas:
 
 ### Phase 1 — Core MVP
 
-* [ ] Project setup with Java 25 and Spring Boot 4
-* [ ] PostgreSQL and Flyway setup
+* [x] Project setup with Java 25 and Spring Boot 4
+* [x] PostgreSQL and Flyway setup
 * [ ] Authentication with JWT
 * [ ] Organization and user model
 * [ ] Customer CRUD
