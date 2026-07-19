@@ -320,8 +320,8 @@ Exemplos de áreas de teste:
 
 ### Fase 1 — MVP principal
 
-- [ ] Configuração do projeto com Java 25 e Spring Boot 4
-- [ ] Configuração do PostgreSQL e Flyway
+- [x] Configuração do projeto com Java 25 e Spring Boot 4
+- [x] Configuração do PostgreSQL e Flyway
 - [ ] Autenticação com JWT
 - [ ] Modelo de organização e usuário
 - [ ] CRUD de clientes
