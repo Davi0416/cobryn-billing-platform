@@ -1,6 +1,6 @@
-package com.cobryn.organization.application;
+package com.cobryn.organization.web;
 
-import com.cobryn.organization.OrganizationService;
+import com.cobryn.organization.application.OrganizationService;
 import com.cobryn.organization.web.dtos.ChangeOrganizationNameRequest;
 import com.cobryn.organization.web.dtos.ChangeOrganizationSlugRequest;
 import com.cobryn.organization.web.dtos.CreateOrganizationRequest;

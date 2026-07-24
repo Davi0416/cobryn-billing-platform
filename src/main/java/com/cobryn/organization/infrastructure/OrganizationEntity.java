@@ -1,4 +1,4 @@
-package com.cobryn.organization.application;
+package com.cobryn.organization.infrastructure;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

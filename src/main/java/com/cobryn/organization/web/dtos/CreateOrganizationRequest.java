@@ -1,4 +1,7 @@
 package com.cobryn.organization.web.dtos;
 
-public class CreateOrganizationRequest {
+public record CreateOrganizationRequest(
+        String name,
+        String slug
+) {
 }

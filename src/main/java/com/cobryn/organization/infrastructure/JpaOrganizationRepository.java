@@ -1,7 +1,6 @@
-package com.cobryn.organization;
+package com.cobryn.organization.infrastructure;
 
 
-import com.cobryn.organization.application.OrganizationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,9 +1,10 @@
-package com.cobryn.organization;
+package com.cobryn.organization.application;
 
 import com.cobryn.organization.domain.Organization;
 import com.cobryn.organization.domain.OrganizationRepository;
 import com.cobryn.organization.domain.exception.OrganizationNotFoundException;
 import com.cobryn.organization.domain.exception.OrganizationSlugAlreadyExistsException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +73,10 @@ public class OrganizationService {
                 .orElseThrow(() -> new OrganizationNotFoundException(id));
 
         organization.changeSlug(normalizedSlug);
-
-        return organizationRepository.save(organization);
+        try {
+            return organizationRepository.save(organization);
+        } catch (DataIntegrityViolationException e) {
+            throw new OrganizationSlugAlreadyExistsException(normalizedSlug, e);
+        }
     }
 }

@@ -1,4 +1,6 @@
 package com.cobryn.organization.web.dtos;
 
-public class ChangeOrganizationNameRequest {
+public record ChangeOrganizationNameRequest (
+        String name
+){
 }
