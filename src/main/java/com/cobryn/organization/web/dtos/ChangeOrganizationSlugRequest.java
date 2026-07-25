@@ -1,6 +1,8 @@
 package com.cobryn.organization.web.dtos;
 
+import jakarta.validation.constraints.Size;
+
 public record ChangeOrganizationSlugRequest(
-        String slug
+        @Size(min = 2, max = 5) String slug
 ) {
 }

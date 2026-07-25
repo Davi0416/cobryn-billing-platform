@@ -2,16 +2,11 @@ package com.cobryn.organization.infrastructure;
 
 import com.cobryn.organization.domain.Organization;
 import com.cobryn.organization.domain.OrganizationRepository;
-import com.cobryn.organization.domain.exception.OrganizationSlugAlreadyExistsException;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Slf4j
 @Repository
 public class OrganizationRepositoryAdapter
         implements OrganizationRepository {
@@ -24,24 +19,8 @@ public class OrganizationRepositoryAdapter
 
     @Override
     public Organization save(Organization organization) {
-        try {
-            OrganizationEntity savedEntity = jpaOrganizationRepository.save(toEntity(organization));
-            return toDomain(savedEntity);
-        } catch (DataIntegrityViolationException e) {
-            Throwable root = e.getRootCause() != null ? e.getRootCause() : e;
-
-            if (root instanceof ConstraintViolationException cve) {
-                String constraint = cve.getConstraintName();
-
-                if (constraint != null && constraint.toLowerCase().contains("slug")) {
-                    log.warn("Slug conflict for '{}': constraint={}", organization.getSlug(), constraint, e);
-                    throw new OrganizationSlugAlreadyExistsException(organization.getSlug(), e);
-                }
-            }
-
-            log.error("Data integrity error saving organization '{}'", organization.getSlug(), e);
-            throw e;
-        }
+        OrganizationEntity savedEntity = jpaOrganizationRepository.save(toEntity(organization));
+        return toDomain(savedEntity);
     }
 
     @Override
