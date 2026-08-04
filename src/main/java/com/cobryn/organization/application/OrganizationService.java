@@ -4,16 +4,16 @@ import com.cobryn.organization.domain.Organization;
 import com.cobryn.organization.domain.OrganizationRepository;
 import com.cobryn.organization.domain.exception.OrganizationNotFoundException;
 import com.cobryn.organization.domain.exception.OrganizationSlugAlreadyExistsException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Slf4j
 @Service
+@Transactional(readOnly = true)
 public class OrganizationService {
+
     private final OrganizationRepository organizationRepository;
 
     public OrganizationService(
@@ -22,35 +22,29 @@ public class OrganizationService {
         this.organizationRepository = organizationRepository;
     }
 
-    private String checkIfSlugExists(String slug) {
-        String normalizedSlug = slug.trim().toLowerCase();
-
-        if(organizationRepository.existsBySlug(normalizedSlug)) {
-            log.error(String.valueOf(new OrganizationSlugAlreadyExistsException(normalizedSlug)));
-            throw new OrganizationSlugAlreadyExistsException(normalizedSlug);
-        }
-        return normalizedSlug;
-    }
-
     @Transactional
     public Organization createOrganization(String name, String slug) {
-        String normalizedSlug = slug.trim().toLowerCase();
+        String normalizedSlug = normalizeSlug(slug);
+
+        checkIfSlugAlreadyExists(normalizedSlug);
 
         Organization organization = new Organization(name, normalizedSlug);
 
-        return organizationRepository.save(organization);
+        try {
+            return organizationRepository.save(organization);
+        } catch (DataIntegrityViolationException e) {
+            throw new OrganizationSlugAlreadyExistsException(normalizedSlug, e);
+        }
     }
 
-    @Transactional(readOnly = true)
     public Organization findOrganizationBySlug(String slug) {
-        String normalizedSlug = checkIfSlugExists(slug);
+        String normalizedSlug = normalizeSlug(slug);
 
         return organizationRepository.findBySlug(normalizedSlug)
                 .orElseThrow(() ->
                         new OrganizationNotFoundException(normalizedSlug));
     }
 
-    @Transactional(readOnly = true)
     public Organization findOrganizationById(UUID id) {
         return organizationRepository.findById(id)
                 .orElseThrow(() ->
@@ -70,16 +64,30 @@ public class OrganizationService {
 
     @Transactional
     public Organization changeOrganizationSlug(UUID id, String slug) {
-        String normalizedSlug = checkIfSlugExists(slug);
+        String normalizedSlug = normalizeSlug(slug);
+
+        checkIfSlugAlreadyExists(normalizedSlug);
 
         Organization organization = organizationRepository.findById(id)
-                .orElseThrow(() -> new OrganizationNotFoundException(id));
+                .orElseThrow(() ->
+                        new OrganizationNotFoundException(id));
 
         organization.changeSlug(normalizedSlug);
+
         try {
             return organizationRepository.save(organization);
         } catch (DataIntegrityViolationException e) {
             throw new OrganizationSlugAlreadyExistsException(normalizedSlug, e);
+        }
+    }
+
+    private String normalizeSlug(String slug) {
+        return slug.trim().toLowerCase();
+    }
+
+    private void checkIfSlugAlreadyExists(String slug) {
+        if (organizationRepository.existsBySlug(slug)) {
+            throw new OrganizationSlugAlreadyExistsException(slug);
         }
     }
 }

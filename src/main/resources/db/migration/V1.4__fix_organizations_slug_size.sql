@@ -1,0 +1,4 @@
+ALTER TABLE organizations
+ALTER
+COLUMN slug TYPE VARCHAR(80);
+
