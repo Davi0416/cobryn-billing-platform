@@ -30,6 +30,7 @@ public class OrganizationEntity {
         this.updatedAt = updatedAt;
     }
 
+    // Construtor exigido pelo JPA ao materializar entidades do banco de dados.
     public OrganizationEntity() {
 
     }

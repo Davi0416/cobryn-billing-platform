@@ -30,6 +30,7 @@ public class Organization {
         this.updatedAt = Instant.now();
     }
 
+    // Reidrata uma organização existente sem gerar novamente sua identidade ou datas.
     public Organization(UUID id, String name, String slug, boolean active, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;

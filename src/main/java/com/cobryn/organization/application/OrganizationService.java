@@ -86,6 +86,7 @@ public class OrganizationService {
     }
 
     private void checkIfSlugAlreadyExists(String slug) {
+        // A restrição do banco continua sendo a proteção final contra requisições concorrentes.
         if (organizationRepository.existsBySlug(slug)) {
             throw new OrganizationSlugAlreadyExistsException(slug);
         }

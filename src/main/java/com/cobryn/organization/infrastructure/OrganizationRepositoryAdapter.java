@@ -42,6 +42,7 @@ public class OrganizationRepositoryAdapter
 
 
     private Organization toDomain(OrganizationEntity organizationEntity) {
+        // Usa o construtor de reidratação para preservar o estado persistido do agregado.
         return new Organization(
                 organizationEntity.getId(),
                 organizationEntity.getName(),

@@ -74,6 +74,7 @@ public class GlobalExceptionHandler {
     private boolean isSlugConflict(Throwable ex) {
         Throwable current = ex;
 
+        // Exceções de persistência podem encapsular o erro original em vários níveis.
         while (current != null) {
             if (current instanceof ConstraintViolationException constraintViolationException) {
                 String constraintName = constraintViolationException.getConstraintName();
