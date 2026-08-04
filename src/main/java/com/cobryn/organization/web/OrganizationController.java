@@ -5,6 +5,7 @@ import com.cobryn.organization.web.dtos.ChangeOrganizationNameRequest;
 import com.cobryn.organization.web.dtos.ChangeOrganizationSlugRequest;
 import com.cobryn.organization.web.dtos.CreateOrganizationRequest;
 import com.cobryn.organization.web.dtos.OrganizationResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,7 @@ public class OrganizationController {
 
     @PostMapping
     public ResponseEntity<OrganizationResponse> createOrganization(
-            @RequestBody CreateOrganizationRequest createOrganizationRequest) {
+            @Valid @RequestBody CreateOrganizationRequest createOrganizationRequest) {
 
         OrganizationResponse organization = new OrganizationResponse(
                 organizationService.createOrganization(
@@ -59,7 +60,7 @@ public class OrganizationController {
     @PutMapping("/slug/{id}")
     public ResponseEntity<OrganizationResponse> changeOrganizationSlug(
             @PathVariable UUID id,
-            @RequestBody ChangeOrganizationSlugRequest changeOrganizationSlugRequest) {
+            @Valid @RequestBody ChangeOrganizationSlugRequest changeOrganizationSlugRequest) {
 
         OrganizationResponse organizationWithNewSlug = new OrganizationResponse(
                 organizationService.changeOrganizationSlug(id, changeOrganizationSlugRequest.slug())
@@ -71,7 +72,7 @@ public class OrganizationController {
     @PutMapping("/{id}")
     public ResponseEntity<OrganizationResponse> changeOrganizationName(
             @PathVariable UUID id,
-            @RequestBody ChangeOrganizationNameRequest changeOrganizationNameRequest) {
+            @Valid @RequestBody ChangeOrganizationNameRequest changeOrganizationNameRequest) {
 
         OrganizationResponse organizationWithNewName = new OrganizationResponse(
                 organizationService.changeOrganizationName(id, changeOrganizationNameRequest.name())
